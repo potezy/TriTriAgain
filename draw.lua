@@ -4,6 +4,77 @@ YRES = 500
 step = .01
 MAX_COLOR = 255
 
+poly_matrix = {{},{},{},{}}
+
+function add_box(x , y , z , width , height, depth)
+	 local x1,y1,z1,x0,y0,z0
+	 x0 = x
+	 x1 = x + width
+	 y0 = y
+	 y1 = y - height
+	 z0 = z
+	 z1 = z - depth
+	add_polygon(poly_matrix,x0,y0,z0, --v1
+	             x0,y1,z0, --v2
+		     x1,y1,z0) --v3
+	add_polygon(poly_matrix,x1,y1,z0, --v3
+		     x1,y0,z0, --v4
+		     x0,y0,z0) --v1
+	add_polygon(poly_matrix,x1,y0,z0,
+		     x1,y1,z0,
+		     x1,y1,z1)
+	add_polygon(poly_matrix,x1,y1,z1,
+		     x1,y0,z1,
+		     x1,y0,z0)
+	add_polygon(poly_matrix,x1,y0,z1,
+		     x1,y1,z1,
+		     x0,y1,z1)
+	 add_polygon(poly_matrix,x0,y1,z1,
+		     x0,y0,z1,
+		     x1,y0,z1)
+	 add_polygon(poly_matrix,x0,y0,z1,
+		     x0,y1,z1,
+		     x0,y1,z0)
+	 add_polygon(poly_matrix,x0,y1,z0,
+		     x0,y0,z0,
+		     x0,y0,z1)
+	 add_polygon(poly_matrix,x0,y0,z1,
+	             x0,y0,z1,
+		     x1,y0,z0)
+	 add_polygon(poly_matrix,x1,y0,z0,
+		     x1,y0,z1,
+		     x0,y0,z1)	
+	 add_polygon(poly_matrix,x0,y1,z0,
+		     x1,y1,z0,
+		     x1,y1,z1)
+	 add_polygon(poly_matrix,x1,y1,z1,
+		     x0,y1,z1,
+	 	     x0,y1,z0)
+end
+
+function add_polygon(matrix,x0,y0,z0, x1,y1,z1, x2,y2,z2)
+	 addPoint(poly_matrix, x0,y0,z0)
+	 addPoint(poly_matrix, x1,y1,z1)
+	 addPoint(poly_matrix, x2,y2,z2)
+end
+
+function draw_polygons(matrix,board,c)
+	 local x0,x1,x2,y0,y1,y1,z0,z1,z2
+	 for i = 1 , sizeOf(matrix[1]) , 3 do
+	     x0 = math.floor(matrix[1][i])
+	     x1 = math.floor(matrix[1][i+1])
+	     x2 = math.floor(matrix[1][i+2])
+	     y0 = math.floor(matrix[2][i])
+	     y1 = math.floor(matrix[2][i+1])
+	     y2 = math.floor(matrix[2][i+2])
+	     --print(x1,y1,x2,y2)
+	     color = Color:new((x1+x2)%255, (y1+y2)%255, (x1+x2+y1+y2)%255)
+	     draw_line(x0,y0,x1,y1,color,board)
+	     draw_line(x1,y1,x2,y2,color,board)
+	     draw_line(x2,y2,x0,y0,color,board)
+	 end
+end
+
 --object to store color
 Color = {red = 0, green = 0 , blue = 0}
 
@@ -110,6 +181,7 @@ function draw(board, eMatrix)
 	     color = Color:new((x1+x2)%255, (y1+y2)%255, (x1+x2+y1+y2)%255)
 	     draw_line(x1,y1,x2,y2,color,board)
 	 end
+	 
 	 --printMatrix(eMatrix)
 end
 
@@ -120,9 +192,9 @@ function addPoint(matrix, x,y,z)
 	 table.insert(matrix[4],1)
 end
 
-function addEdge(pMatrix, x1,y1,z1,x2,y2,z2)
-	 addPoint(pMatrix,x1,y1,z1)
-	 addPoint(pMatrix,x2,y2,z2)
+function addEdge(matrix, x1,y1,z1,x2,y2,z2)
+	 addPoint(matrix,x1,y1,z1)
+	 addPoint(matrix,x2,y2,z2)
 end
 
 function add_curve(x0,y0,x1,y1,x2,y2,x3,y3,t)
@@ -155,7 +227,7 @@ function circle(cx , cy , cz , r)
 	 end
 	 
 end
-
+--[[
 function add_box(x , y , z , width , height, depth)
 	 addEdge(eMatrix, x, y, z, x, y, z)--upper left
 	 addEdge(eMatrix, x+width, y, z, x+width, y, z)--upper right
@@ -166,7 +238,7 @@ function add_box(x , y , z , width , height, depth)
 	 addEdge(eMatrix, x, y-height,z-depth,x,y-height,z-depth)
 	 addEdge(eMatrix, x+width, y-height,z-depth,x+width,y-height,z-depth)
 end
-
+--]]
 function add_sphere(cx , cy , cz , r )
 	 local sphere_points, x , y , z
 	 sphere_points = generate_sphere(cx,cy,cz,r)
@@ -175,8 +247,6 @@ function add_sphere(cx , cy , cz , r )
 	     x = sphere_points[1][i]
 	     y = sphere_points[2][i]
 	     z = sphere_points[3][i]
-	     --print(x,y,z)
-	     addEdge(eMatrix, x,y,z,x,y,z)
 	 end
 end
 function generate_sphere(cx , cy , cz , r)

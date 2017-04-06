@@ -52,7 +52,7 @@ function parseFile(f)
 		   		  
              elseif (ln[1] == "apply") then
 	     	    eMatrix = matrixMult(tMatrix, eMatrix)
-	
+		    poly_matrix = matrixMult(tMatrix,poly_matrix)	
 	     elseif (ln[1] == "save") then
 	     	    args = lines[i+1]:split(" ")
 		    save(board)
@@ -61,7 +61,8 @@ function parseFile(f)
 	
 	     elseif (ln[1] == "display") then
 	     	    clear_screen(board)
-	     	    draw(board, eMatrix)
+	     	    --draw(board, eMatrix)
+		    draw_polygons(poly_matrix,board,4)
 	     	    save(board)
 	     	    local a = "display line.ppm" 
 		    print(a)

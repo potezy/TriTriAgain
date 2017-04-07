@@ -61,8 +61,8 @@ function parseFile(f)
 	
 	     elseif (ln[1] == "display") then
 	     	    clear_screen(board)
-	     	    --draw(board, eMatrix)
-		    draw_polygons(poly_matrix,board,4)
+	     	    draw(board, eMatrix)
+		    --draw_polygons(poly_matrix,board,4)
 	     	    save(board)
 	     	    local a = "display line.ppm" 
 		    print(a)

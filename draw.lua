@@ -250,15 +250,15 @@ function add_sphere(cx , cy , cz , r )
 	     x1 = sphere_points[1][i+1]
 	     y1 = sphere_points[2][i+1]
 	     z1 = sphere_points[3][i+1]
-	     x2 = sphere_points[1][i+1/step +2]
-	     y2 = sphere_points[2][i+1/step +2]
-	     z2 = sphere_points[3][i+1/step +2]
+	     x2 = sphere_points[1][i+1 +2]
+	     y2 = sphere_points[2][i+1 +2]
+	     z2 = sphere_points[3][i+1 +2]
 	     
-	     --print(x,y,z,x1,y1,z1,x2,y2,z2)
+	     print(i, i+1 , i+1/step +2)
 	     if(i+1 <= sizeOf(sphere_points[1] ) ) then
 	     	    addEdge(eMatrix, x,y,z,x1,y1,z1)
 		    print("1st connecting points" ,i , i+1)
-		    if (i +1/step +1 <= sizeOf(sphere_points[1])) then
+		    if (i +1/step +2 <= sizeOf(sphere_points[1])) then
 	     	       addEdge(eMatrix, x1,y1,z1,x2,y2,z2)
 	     	       addEdge(eMatrix, x2,y2,z2,x,y,z)
 		       print("2nd connecting points", i+1 , i+1/step+1)

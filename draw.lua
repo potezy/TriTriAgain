@@ -242,36 +242,33 @@ end
 function add_sphere(cx , cy , cz , r )
 	 local sphere_points, x , y , z ,x1,y1,z1,x2,y2,z2
 	 sphere_points = generate_sphere(cx,cy,cz,r)
-	 print(sizeOf(sphere_points[1]))
-	 for i = 1, sizeOf(sphere_points[1])-1 do
+	 ss = sizeOf(sphere_points[1])
+	 for i = 1, sizeOf(sphere_points[1]) do
 	     x = sphere_points[1][i]
 	     y = sphere_points[2][i]
 	     z = sphere_points[3][i]
 	     x1 = sphere_points[1][i+1]
 	     y1 = sphere_points[2][i+1]
 	     z1 = sphere_points[3][i+1]
-	     x2 = sphere_points[1][i+1 +2]
-	     y2 = sphere_points[2][i+1 +2]
-	     z2 = sphere_points[3][i+1 +2]
+	     x2 = sphere_points[1][(i+1 +1/step)%ss]
+	     y2 = sphere_points[2][(i+1 +1/step)%ss]
+	     z2 = sphere_points[3][(i+1 +1/step)%ss]
 	     
-	     print(i, i+1 , i+1/step +2)
-	     if(i+1 <= sizeOf(sphere_points[1] ) ) then
-	     	    addEdge(eMatrix, x,y,z,x1,y1,z1)
-		    print("1st connecting points" ,i , i+1)
-		    if (i +1/step +2 <= sizeOf(sphere_points[1])) then
-	     	       addEdge(eMatrix, x1,y1,z1,x2,y2,z2)
-	     	       addEdge(eMatrix, x2,y2,z2,x,y,z)
-		       print("2nd connecting points", i+1 , i+1/step+1)
-		    end
-	     end
+	     if (i % (1/step +1) ~= 0) then
+	     	addEdge(eMatrix,x,y,z,x1,y1,z1)
+		addEdge(eMatrix,x1,y1,z1,x2,y2,z2)
+		addEdge(eMatrix,x2,y2,z2,x,y,z)
+		print(i)
+	     end 
+	  
 	 end
 end
 step = .2
 function generate_sphere(cx , cy , cz , r)
          local rot,circ,x,y,z, point_matrix
          point_matrix = makeMatrix(4,0)
-         for rot = 0, 1- 3*step, step do
-             for circ = 0, 1-3*step  , step do
+         for rot = 0, 1- 0*step, step do
+             for circ = 0, 1-0*step  , step do
                  x = r * cos(circ * pi) + cx
                  y = r * sin(circ * pi) * cos(rot * 2 * pi) + cy
                  z = r * sin(circ * pi) * sin(rot * 2 * pi) + cz

@@ -243,7 +243,7 @@ function add_sphere(cx , cy , cz , r )
 	 local sphere_points, x , y , z ,x1,y1,z1,x2,y2,z2
 	 sphere_points = generate_sphere(cx,cy,cz,r)
 	 ss = sizeOf(sphere_points[1])
-	 for i = 1, sizeOf(sphere_points[1]) do
+	 for i = 1, sizeOf(sphere_points[1])+1 do
 	     x = sphere_points[1][i]
 	     y = sphere_points[2][i]
 	     z = sphere_points[3][i]
@@ -258,7 +258,7 @@ function add_sphere(cx , cy , cz , r )
 	     	addEdge(eMatrix,x,y,z,x1,y1,z1)
 		addEdge(eMatrix,x1,y1,z1,x2,y2,z2)
 		addEdge(eMatrix,x2,y2,z2,x,y,z)
-		print(i)
+		--print(i)
 	     end 
 	  
 	 end
@@ -267,7 +267,7 @@ step = .2
 function generate_sphere(cx , cy , cz , r)
          local rot,circ,x,y,z, point_matrix
          point_matrix = makeMatrix(4,0)
-         for rot = 0, 1- 0*step, step do
+         for rot = 0, 1- 1*step, step do
              for circ = 0, 1-0*step  , step do
                  x = r * cos(circ * pi) + cx
                  y = r * sin(circ * pi) * cos(rot * 2 * pi) + cy

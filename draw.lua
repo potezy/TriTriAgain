@@ -54,20 +54,25 @@ end
 
 function add_polygon(matrix,x0,y0,z0, x1,y1,z1, x2,y2,z2)
 	 local temp = sizeOf(matrix[1])
+	 local x ,y,z
 	 addPoint(matrix, x0,y0,z0)
+	 --x = sizeOf(matrix[1])
+	 --if x == 490 then print(x0,y0,z0,x1,y1,z1,x2,y2,z2) end
 	 addPoint(matrix, x1,y1,z1)
+	 y = sizeOf(matrix[1])
 	 addPoint(matrix, x2,y2,z2)
-	 print(sizeOf(matrix[1]))
+	 z = sizeOf(matrix[1])
+	 --print(x,y,z)
 end
 
 function draw_polygons(matrix,board,c)
 	  local x0,x1,x2,y0,y1,y1,z0,z1,z2,i
 	  --for k = o , sizeOf(matrix[1]
-	  print(sizeOf(matrix[1]),sizeOf(matrix[2]),sizeOf(matrix[3]))
+	  --print(sizeOf(matrix[1]),sizeOf(matrix[2]),sizeOf(matrix[3]))
 	  for i = 1, sizeOf(matrix[1])-3 ,3 do
 	      local color = Color:new(14,140,240)
 	      --print(matrix[1][i], matrix[2][i], matrix[1][i+1], matrix[2][i+1], matrix[1][i+2], matrix[2][i+2])
-	      --if backface_cull(matrix[1][i],matrix[2][i],matrix[3][i], matrix[1][i+1],matrix[2][i+1],matrix[3][i+1],matrix[1][i+2],matrix[2][i+2],matrix[3][i+2]) then
+	      if backface_cull(matrix[1][i],matrix[2][i],matrix[3][i], matrix[1][i+1],matrix[2][i+1],matrix[3][i+1],matrix[1][i+2],matrix[2][i+2],matrix[3][i+2]) then
 	      draw_line(matrix[1][i],
 			matrix[2][i],
 	   		matrix[1][i+1],
@@ -85,7 +90,7 @@ function draw_polygons(matrix,board,c)
 	   		matrix[1][i],
 	   		matrix[2][i],
 			color,board)		
-	 --end
+	 end
 
 	 end
 end
@@ -289,13 +294,20 @@ function add_sphere(cx , cy , cz , r )
 			      sphere_points[2][index +num_steps],
 			      sphere_points[3][index +num_steps])
 			      
-	          --print(index, index +1 , index + num_steps +1 , index + num_steps)
+	         -- print(sphere_points[1][index], sphere_points[2][index] , sphere_points[3][index])
+		 -- print(sphere_points[1][index+1], sphere_points[2][index+1] , sphere_points[3][index+1])
+		 -- print(sphere_points[1][index+num_steps+1], sphere_points[2][index+1+num_steps] , sphere_points[3][index+1+num_steps])
+		 -- print(sphere_points[1][index+num_steps], sphere_points[2][index+num_steps] , sphere_points[3][index+num_steps])
+
 	      end
           end
-	
-	  for longt = 0, num_steps -2  do
-	      index = lat * num_steps + longt +1
+	  
+	  --print("divide")
+	  for longt = 1, num_steps -1  do
+	      index = lat * num_steps + longt 
+	      --print(lat,longt)
 	      index = math.floor(index)
+	      --print("index:  ",index)
 	      add_polygon( poly_matrix,           
 	      		    sphere_points[1][index],
 			    sphere_points[2][index],
@@ -316,6 +328,11 @@ function add_sphere(cx , cy , cz , r )
 			   sphere_points[1][longt],
 			   sphere_points[2][longt],
 			   sphere_points[3][longt])
+	          --[[print(sphere_points[1][index], sphere_points[2][index] , sphere_points[3][index])
+		  print(sphere_points[1][index+1], sphere_points[2][index+1] , sphere_points[3][index+1])
+		  print(sphere_points[1][longt], sphere_points[2][longt] , sphere_points[3][longt])
+		  print(sphere_points[1][longt+1], sphere_points[2][longt+1] , sphere_points[3][longt+1])
+		  --]]
                end
 end
 

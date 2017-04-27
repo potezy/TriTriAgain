@@ -53,38 +53,39 @@ function add_box(x , y , z , width , height, depth)
 end
 
 function add_polygon(matrix,x0,y0,z0, x1,y1,z1, x2,y2,z2)
-	 addPoint(poly_matrix, x0,y0,z0)
-	 addPoint(poly_matrix, x1,y1,z1)
-	 addPoint(poly_matrix, x2,y2,z2)
+	 local temp = sizeOf(matrix[1])
+	 addPoint(matrix, x0,y0,z0)
+	 addPoint(matrix, x1,y1,z1)
+	 addPoint(matrix, x2,y2,z2)
+	 print(sizeOf(matrix[1]))
 end
 
 function draw_polygons(matrix,board,c)
-	 --print(matrix[1][3])
-	 --print(sizeOf(matrix[4]))
-	 --printMatrix(matrix)
-	 local x0,x1,x2,y0,y1,y1,z0,z1,z2
-	 --print(sizeOf(matrix[1]) -3)
-	 for i = 1 , sizeOf(matrix[1]) -1, 3 do
-	     x0 = math.floor(matrix[1][i])
-	     --print(matrix[1][i+1])
-	     x1 = math.floor(matrix[1][i+1])
-	     print(i ,matrix[1][i+2])
-	     x2 = math.floor(matrix[1][i+2])
-	     y0 = math.floor(matrix[2][i])
-	     y1 = math.floor(matrix[2][i+1])
-	     y2 = math.floor(matrix[2][i+2])
-	     z0 = math.floor(matrix[3][i])
-	     z1 = math.floor(matrix[3][i+1])
-	     z2 = math.floor(matrix[3][i+2])
-	     --print(x1,y1,x2,y2)
-	     color = Color:new((x1+x2)%255, (y1+y2)%255, (x1+x2+y1+y2)%255)
-	     if backface_cull(x0,y0,z0,x1,y1,z1,x2,y2,z2) then 
-	     	draw_line(x0,y0,x1,y1,color,board)
-	    	draw_line(x1,y1,x2,y2,color,board)
-	     	draw_line(x2,y2,x0,y0,color,board)
-		--print(1)
-	     end
+	  local x0,x1,x2,y0,y1,y1,z0,z1,z2,i
+	  --for k = o , sizeOf(matrix[1]
+	  print(sizeOf(matrix[1]),sizeOf(matrix[2]),sizeOf(matrix[3]))
+	  for i = 1, sizeOf(matrix[1])-3 ,3 do
+	      local color = Color:new(14,140,240)
+	      --print(matrix[1][i], matrix[2][i], matrix[1][i+1], matrix[2][i+1], matrix[1][i+2], matrix[2][i+2])
+	      --if backface_cull(matrix[1][i],matrix[2][i],matrix[3][i], matrix[1][i+1],matrix[2][i+1],matrix[3][i+1],matrix[1][i+2],matrix[2][i+2],matrix[3][i+2]) then
+	      draw_line(matrix[1][i],
+			matrix[2][i],
+	   		matrix[1][i+1],
+	   		matrix[2][i+1],
+			color,board)
 
+	      draw_line(matrix[1][i+1],
+			matrix[2][i+1],
+	   		matrix[1][i+2],
+	   		matrix[2][i+2],
+			color,board)
+
+	      draw_line(matrix[1][i+2],
+			matrix[2][i+2],
+	   		matrix[1][i],
+	   		matrix[2][i],
+			color,board)		
+	 --end
 
 	 end
 end
@@ -226,7 +227,7 @@ function add_curve(x0,y0,x1,y1,x2,y2,x3,y3,t)
 end
 
 function circle(cx , cy , cz , r)
-	 print("potato")
+	 --print("potato")
 	 local step = .01
 	 local xcor, ycor, xcor0, ycor0
 	 xcor0 = r + cx --first point
@@ -254,53 +255,79 @@ function add_box(x , y , z , width , height, depth)
 end
 --]]
 function add_sphere(cx , cy , cz , r )
-	 local sphere_points, x0 , y0 , z0 ,x1,y1,z1,x2,y2,z2,x3,y3,z3
+	 local sphere_points,num_steps, x0 , y0 , z0 ,x1,y1,z1,x2,y2,z2,x3,y3,z3
 	 sphere_points = generate_sphere(cx,cy,cz,r)
 	 ss = sizeOf(sphere_points[1])
-	 print(ss)
-	 --printMatrix(sphere_points)
-	 for i = 1, sizeOf(sphere_points[1]) -1 do
-	     x0 = sphere_points[1][i]
-	     y0 = sphere_points[2][i]
-	     z0 = sphere_points[3][i]
-	     x1 = sphere_points[1][i+1]
-	     y1 = sphere_points[2][i+1]
-	     z1 = sphere_points[3][i+1]
-	     local ret2,ret3
-	     
-	     ret2 = (i +1/step)%ss
-	     --if (i +1 + 1/step == ss) then ret2 = ss  end
 
-	     x2 = sphere_points[1][ret2]
-	     y2 = sphere_points[2][ret2]
-	     z2 = sphere_points[3][ret2]
-
-	     ret3 = (i+1 +1/step)%ss
-	     --if (i +2 +1/step == ss) then ret3 = ss end
-	     x3 = sphere_points[1][ret3]
-	     y3 = sphere_points[2][ret3]
-	     z3 = sphere_points[3][ret3]
-	     --print(x0,y0,z0,x1,y1,z1,x2,y2,z2)	    
-	     --print(x0,y0,z1,x1,y1,z1,x2,y2,z2,x3,y3,z3) 
-	     --print(i, 1/step ,i % (1/step))
-	     --print(i)
-	     if (i % (1/step) ~= 0) then
-	     	--print(i,i+1,ret2,ret3)
-	      	add_polygon(poly_matrix, x0,y0,z0,x1,y1,z1,x2,y2,z2)
-	      	add_polygon(poly_matrix, x1,y1,z1,x3,y3,z3,x2,y2,z2) 	
-             end
-	 end
+	 num_steps = 1/step 
+	 local lat, longt = 0,0
+	 for i = 0, num_steps -2  do
+	     lat = lat +1
+	     for l = 0, num_steps-2  do
+	     	 local index = i * num_steps + l +1
+		 index = math.floor(index)
+		 --print(index)
+		 longt = longt +1
+		 add_polygon( poly_matrix,
+			      sphere_points[1][index],
+			      sphere_points[2][index],
+			      sphere_points[3][index],
+			      sphere_points[1][index +1],
+			      sphere_points[2][index +1],
+			      sphere_points[3][index +1],
+			      sphere_points[1][index + num_steps +1],
+			      sphere_points[2][index + num_steps +1],
+			      sphere_points[3][index + num_steps +1])
+	         add_polygon( poly_matrix,
+		 	      sphere_points[1][index],
+			      sphere_points[2][index],
+			      sphere_points[3][index],
+			      sphere_points[1][index +1 +num_steps],
+			      sphere_points[2][index +1 +num_steps],
+			      sphere_points[3][index +1 +num_steps],
+			      sphere_points[1][index +num_steps], 	
+			      sphere_points[2][index +num_steps],
+			      sphere_points[3][index +num_steps])
+			      
+	          --print(index, index +1 , index + num_steps +1 , index + num_steps)
+	      end
+          end
+	
+	  for longt = 0, num_steps -2  do
+	      index = lat * num_steps + longt +1
+	      index = math.floor(index)
+	      add_polygon( poly_matrix,           
+	      		    sphere_points[1][index],
+			    sphere_points[2][index],
+			    sphere_points[3][index],
+			    sphere_points[1][index +1],
+			    sphere_points[2][index +1],
+			    sphere_points[3][index +1],
+			    sphere_points[1][longt+1],
+			    sphere_points[2][longt+1],
+			    sphere_points[3][longt+1])
+	      add_polygon( poly_matrix,
+	      		   sphere_points[1][index],
+			   sphere_points[2][index],
+			   sphere_points[3][index],
+			   sphere_points[1][longt+1],
+			   sphere_points[2][longt+1],
+			   sphere_points[3][longt+1],
+			   sphere_points[1][longt],
+			   sphere_points[2][longt],
+			   sphere_points[3][longt])
+               end
 end
 
 function generate_sphere(cx , cy , cz , r)
-         local rot,rotation,circle,circ,x,y,z,num_steps, point_matrix
+         local rot,rotation,circlec,circ,x,y,z,num_steps, point_matrix
          point_matrix = makeMatrix(4,0)
 	 local i = 0
-	 num_steps = (1/step +.1)
+	 num_steps = (1/step )
          for rotation = 0, num_steps-1, 1 do
 	     rot = rotation/num_steps
-             for circle = 0, num_steps-1, 1 do
-	     	 circ = circle/num_steps 
+             for circlec = 0, num_steps-1, 1 do
+	     	 circ = circlec/num_steps 
                  x = r * cos(circ * pi) + cx
                  y = r * sin(circ * pi) * cos(rot * 2 * pi) + cy
                  z = r * sin(circ * pi) * sin(rot * 2 * pi) + cz
@@ -315,64 +342,33 @@ end
 
 
 function add_torus(cx , cy , cz , r1 , r2)
-	 local tPoints,x0,x1,x2,x3,y0,y1,y2,y3,z0,z1,z2,z3,tmpP,size,ret3,ret1,ret2
+	 local tPoints,x0,x1,x2,x3,y0,y1,y2,y3,z0,z1,z2,z3,size,lat,longt,num_steps
 	 tPoints = generate_torus(cx,cy,cz,r1,r2)
-	 size = sizeOf(tPoints[1])
-	 for i = 1, (size -1/step +1) do
-	 end
-	 for i = 1, size  do
-	 
-	     x0 = tPoints[1][i]	     
-	     y0 = tPoints[2][i]
-	     z0 = tPoints[3][i]
-
-	     if i%(1/step) == 0  then
-	     	ret1 = i -1/step +1
-	     	x1 = tPoints[1][ret1]
-      		y1 = tPoints[2][ret1]
-		z1 = tPoints[3][ret1]
-	     else
-		ret1 = i +1
-		x1 = tPoints[1][ret1]
-		y1 = tPoints[2][ret1]
-		z1 = tPoints[3][ret1]
-	     end
-	     
-	     if i == size - 1/step then
-	     	ret2 = size
-	     elseif i - size == 0 then
-	     	ret2 = 1
-	     else
-		ret2 = (i +1/step)%size
-             end
-	     
-	     x2 = tPoints[1][ret2]  
-	     y2 = tPoints[2][ret2] 
-	     z2 = tPoints[3][ret2] 
-	     
-	     if ret1 == size - 1/step then
-	     	  ret3 = size
-	     elseif ret1 == size then
-	     	  ret3 = 10
-             else  
-	     	  ret3 = (ret1 + 1/step)%size
-	     end
-	     
-	     if ret3 == 0 then
-	     	x3 = tPoints[1][ret3 +1]
-	     	y3 = tPoints[2][ret3 +1]
-	     	z3 = tPoints[3][ret3 +1]
-	     else
-		x3 = tPoints[1][ret3]
-		y3 = tPoints[2][ret3]
-		z3 = tPoints[3][ret3]
-	     end
-	     add_polygon(poly_matrix, x1,y1,z1, x0,y0,z0, x2,y2,z2)
- 	     add_polygon(poly_matrix, x2,y2,z2, x3,y3,z3, x1,y1,z1)
-
-	     --add_polygon(poly_matrix, x0,y0,z0, x1,y1,z1, x2,y2,z2)
-	     --add_polygon(poly_matrix, x1,y1,z1, x3,y3,z3, x0,y0,z0)
-	     print(i , ret1 , ret2 , ret3) 
+	 num_steps = 1/step
+	 for lat = 0, num_steps -1 do
+	     for longt = 0, num_steps-1  do
+	     	 local index = lat * num_steps +longt
+		 add_polygon( poly_matrix,
+		 	      tPoints[1][index],
+			      tPoints[2][index],
+			      tPoints[3][index],
+			      tPoints[1][index +1],
+			      tPoints[2][index +1],
+			      tPoints[3][index +1],
+			      tPoints[1][index + num_steps],
+			      tPoints[2][index + num_steps],
+			      tPoints[3][index + num_steps])
+	         add_polygon( poly_matrix,
+		 	      tPoints[1][index +1 +num_steps],
+			      tPoints[2][index +1 +num_steps],
+			      tPoints[3][index +1 +num_steps],
+			      tPoints[1][index + num_steps],
+			      tPoints[2][index + num_steps],
+			      tPoints[3][index + num_steps],
+			      tPoints[1][index +1],
+			      tPoints[2][index +1],
+			      tPoints[3][index +1])
+	     end 		      
 	 end
 	 
 end
@@ -382,9 +378,9 @@ function generate_torus(cx , cy , cz , r1 , r2)
 	 torus_points = makeMatrix(4,0)
 	 num_steps = math.floor(1/step +.1)
 	 local i = 0 
-	 for r = 0, num_steps-1 do
+	 for r = 0, num_steps do
 	     rot = r /num_steps
-	     for c = 0, num_steps-1 do
+	     for c = 0, num_steps -1 do
 	     	 circ = c/num_steps
 	     	 x = cos(rot * 2 * pi) * (r1 * cos(circ * 2 * pi) + r2) + cx
 		 y = r1 * sin(circ * 2 * pi) + cy

@@ -45,14 +45,15 @@ function parseFile(f)
 	     elseif (ln[1] == "move") then 
 	     	    args = lines[i+1]:split(" ")
 	     	    tMatrix = matrixMult(translate(args[1], args[2],args[3]), tMatrix)
-	
+
 	     elseif (ln[1] == "rotate") then
 	     	    args = lines[i+1]:split(" ")
-	     	    tMatrix = matrixMult(rotate(args[1], math.rad(args[2])), tMatrix)
-		   		  
+	     	    tMatrix = matrixMult(rotate(args[1], math.rad(args[2])), tMatrix)		   	
+
              elseif (ln[1] == "apply") then
 	     	    eMatrix = matrixMult(tMatrix, eMatrix)
 		    poly_matrix = matrixMult(tMatrix,poly_matrix)	
+
 	     elseif (ln[1] == "save") then
 	     	    args = lines[i+1]:split(" ")
 		    save(board)
@@ -61,8 +62,8 @@ function parseFile(f)
 	
 	     elseif (ln[1] == "display") then
 	     	    clear_screen(board)
-	     	    draw(board, eMatrix)
-		    --draw_polygons(poly_matrix,board,4)
+	     	    --draw(board, eMatrix)
+		    draw_polygons(poly_matrix,board,4)
 	     	    save(board)
 	     	    local a = "display line.ppm" 
 		    print(a)
